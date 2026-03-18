@@ -272,11 +272,11 @@ describe('useHistory', () => {
       const useModelStore = require('../../stores/modelStore').useModelStore;
       const useSceneStore = require('../../stores/sceneStore').useSceneStore;
       
-      useModelStore.mockImplementation((selector) => {
+      useModelStore.mockImplementation((selector: (s: any) => any) => {
         const state = { actions: undefined };
         return selector ? selector(state) : state;
       });
-      useSceneStore.mockImplementation((selector) => {
+      useSceneStore.mockImplementation((selector: (s: any) => any) => {
         const state = { actions: undefined };
         return selector ? selector(state) : state;
       });
@@ -297,11 +297,11 @@ describe('useHistory', () => {
       });
       
       // Restore mocks for other tests
-      useModelStore.mockImplementation((selector) => {
+      useModelStore.mockImplementation((selector: (s: any) => any) => {
         const state = { actions: mockModelStore };
         return selector ? selector(state) : state;
       });
-      useSceneStore.mockImplementation((selector) => {
+      useSceneStore.mockImplementation((selector: (s: any) => any) => {
         const state = { actions: mockSceneStore };
         return selector ? selector(state) : state;
       });

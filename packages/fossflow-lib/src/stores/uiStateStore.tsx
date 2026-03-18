@@ -164,7 +164,7 @@ export function useUiStateStore<T>(
     throw new Error('Missing provider in the tree');
   }
 
-  const value = useStore(store, selector, equalityFn);
+  const value = useStore(store, selector);
   return value;
 }
 

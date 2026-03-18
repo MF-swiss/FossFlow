@@ -4,6 +4,9 @@ module.exports = {
   testEnvironment: "jsdom",
   modulePaths: ['node_modules', '<rootDir>'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!uuid)'
+  ],
   moduleNameMapper: {
     // Force React to resolve from root node_modules to avoid duplicate React instances
     "^react$": "<rootDir>/../../node_modules/react",

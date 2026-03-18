@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import { Model, ModelStore } from 'src/types';
+import { Model } from 'src/types';
 import { validateModel } from 'src/schemas/validation';
 import { getItemByIdOrThrow } from './common';
 
@@ -53,7 +53,7 @@ export const fixModel = (model: Model): Model => {
   }, model);
 };
 
-export const modelFromModelStore = (modelStore: ModelStore): Model => {
+export const modelFromModelStore = (modelStore: Model): Model => {
   return {
     version: modelStore.version,
     title: modelStore.title,
