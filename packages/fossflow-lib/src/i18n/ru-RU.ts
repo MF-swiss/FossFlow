@@ -186,7 +186,7 @@ const locale: LocaleProps = {
     configPath: "Нажмите на иконку Гамбургер",
     configPath2: "в верхнем левом углу, чтобы получить доступ к Конфигурации.",
     canDisable: "Вы можете отключить это поведение, если хотите.",
-    signature: "-Stan"
+    signature: ""
   }
 };
 

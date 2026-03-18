@@ -4,18 +4,7 @@
  <a href="../README.md">English</a> | <a href="README.cn.md">简体中文</a> | <a href="README.es.md">Español</a> | <a href="README.pt.md">Português</a> | <a href="README.fr.md">Français</a> | <a href="README.hi.md">हिन्दी</a> | <a href="README.bn.md">বাংলা</a> | <a href="README.ru.md">Русский</a> | <a href="README.id.md">Bahasa Indonesia</a> | <a href="README.de.md">Deutsch</a>
 </p>
 
-<b>Привет!</b> Я Stan, если вы использовали FossFLOW и это помогло вам, <b>я буду очень признателен, если вы сможете сделать небольшое пожертвование :)</b> Я работаю полный рабочий день, и найти время для работы над этим проектом достаточно сложно.
-Если я реализовал для вас функцию или исправил ошибку, было бы здорово, если бы вы могли :) если нет, то это не проблема, это программное обеспечение всегда останется бесплатным!
-
-
 <b>Также!</b> Если вы еще не сделали этого, пожалуйста, ознакомьтесь с базовой библиотекой, на которой это построено, от <a href="https://github.com/markmanx/isoflow">@markmanx</a> Я действительно стою здесь на плечах гиганта 🫡
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/P5P61KBXA3)
-
-
-Спасибо,
-
--Stan
 
 ## Попробуйте онлайн
 

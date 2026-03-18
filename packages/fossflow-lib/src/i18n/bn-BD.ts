@@ -186,7 +186,7 @@ const locale: LocaleProps = {
     configPath: "হ্যামবার্গার আইকনে ক্লিক করুন",
     configPath2: "কনফিগারেশন অ্যাক্সেস করতে উপরের বাম দিকে।",
     canDisable: "আপনি চাইলে এই আচরণ নিষ্ক্রিয় করতে পারেন।",
-    signature: "-Stan"
+    signature: ""
   }
 };
 

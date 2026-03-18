@@ -186,7 +186,7 @@ const locale: LocaleProps = {
     configPath: "Kliknij ikonę manu.",
     configPath2: "w lewym górnym rogu, aby uzyskać dostęp do ustawień.",
     canDisable: "Jeśli chcesz, możesz wyłączyć tę funkcję..",
-    signature: "-Stan"
+    signature: ""
   }
 };
 

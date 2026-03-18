@@ -186,7 +186,7 @@ const locale: LocaleProps = {
     configPath: "Yapılandırmaya erişmek için",
     configPath2: "sol üstteki Hamburger simgesine tıklayın.",
     canDisable: "İsterseniz bu davranışı devre dışı bırakabilirsiniz.",
-    signature: "-Stan"
+    signature: ""
   }
 };
 

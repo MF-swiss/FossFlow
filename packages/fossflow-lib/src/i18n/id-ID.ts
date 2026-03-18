@@ -186,7 +186,7 @@ const locale: LocaleProps = {
     configPath: "Klik pada ikon Hamburger",
     configPath2: "di kiri atas untuk mengakses Konfigurasi.",
     canDisable: "Anda dapat menonaktifkan perilaku ini jika diinginkan.",
-    signature: "-Stan"
+    signature: ""
   }
 };
 

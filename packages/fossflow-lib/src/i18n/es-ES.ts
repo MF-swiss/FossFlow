@@ -186,7 +186,7 @@ const locale: LocaleProps = {
     configPath: "Haz clic en el icono de Hamburguesa",
     configPath2: "en la esquina superior izquierda para acceder a la Configuración.",
     canDisable: "Puedes desactivar este comportamiento si lo deseas.",
-    signature: "-Stan"
+    signature: ""
   }
 };
 
