@@ -19,8 +19,6 @@ If you've had a feature that I've implemented for you, or fixed a bug it'd be gr
 
 Thanks,
 
--Stan
-
 ## Try it online
 <p align="center">
 Go to  <b> --> https://mf-swiss.github.io/FossFlow/ <-- </b>

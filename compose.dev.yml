@@ -1,0 +1,18 @@
+services:
+  fossflow:
+    build: .
+    ports:
+      - "3000:80"
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - ENABLE_SERVER_STORAGE=true
+      - STORAGE_PATH=/data/diagrams
+      - ENABLE_GIT_BACKUP=false
+      - CORS_ORIGINS=${CORS_ORIGINS:-}
+      - RATE_LIMIT_WINDOW_MS=${RATE_LIMIT_WINDOW_MS:-900000}
+      - RATE_LIMIT_MAX=${RATE_LIMIT_MAX:-300}
+      - HTTP_AUTH_USER=${HTTP_AUTH_USER:-}
+      - HTTP_AUTH_PASSWORD=${HTTP_AUTH_PASSWORD:-}
+    volumes:
+      - ./diagrams:/data/diagrams
