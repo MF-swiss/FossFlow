@@ -5,6 +5,23 @@ All notable changes to FossFLOW will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.9](https://github.com/MF-swiss/FossFlow/compare/v1.10.8...v1.10.9) (2026-03-19)
+
+### Added
+
+* Added connector render-tile normalization utility and regression tests for connector direction/fallback behavior.
+
+### Changed
+
+* Updated connector rendering pipeline to use normalized render coordinates (removed mirrored SVG workaround).
+* Updated compatibility for current dependency APIs (Zod v4, MUI Grid, Zustand selector hooks, Jest/ESM-safe ID generation).
+
+### Fixed
+
+* Fixed connector horizontal mirroring root cause.
+* Fixed test/runtime issues caused by ESM `uuid` import in Jest.
+* Fixed snapshot drift in DebugUtils-related tests after styling/runtime updates.
+
 ## [1.10.8](https://github.com/MF-swiss/FossFlow/compare/v1.10.7...v1.10.8) (2026-03-01)
 
 ### Bug Fixes
