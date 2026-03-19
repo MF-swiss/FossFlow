@@ -37,6 +37,49 @@ docker run -p 80:80 -v $(pwd)/diagrams:/data/diagrams mfswiss/fossflow:latest
 
 Server storage is enabled by default in Docker. Your diagrams will be saved to `./diagrams` on the host.
 
+### Step-by-Step Docker Guide (Recommended)
+
+Use this if you want a reliable local setup without installing Node.js directly.
+
+1. **Install and start Docker Desktop**
+   - Ensure Docker Engine is running before continuing.
+
+2. **Clone and enter the repository**
+   ```bash
+   git clone https://github.com/MF-swiss/FossFlow
+   cd FossFLOW
+   ```
+
+3. **Start FossFLOW with the development compose file**
+   ```bash
+   docker compose -f compose.dev.yml up --build
+   ```
+
+4. **Open the app in your browser**
+   - Frontend: [http://localhost:3000](http://localhost:3000)
+   - Backend API: [http://localhost:3001](http://localhost:3001)
+
+5. **Stop the stack**
+   - Press `Ctrl + C` in the running terminal, then:
+   ```bash
+   docker compose -f compose.dev.yml down
+   ```
+
+6. **Run in background (optional)**
+   ```bash
+   docker compose -f compose.dev.yml up -d --build
+   ```
+   To stop background services:
+   ```bash
+   docker compose -f compose.dev.yml down
+   ```
+
+### Common Docker Troubleshooting
+
+- **Port already in use (3000/3001)**: stop the process using that port, then restart compose.
+- **Docker daemon not reachable**: restart Docker Desktop and wait until it is fully started.
+- **Changes not visible**: restart with `--build` and hard refresh the browser.
+
 To disable server storage, set `ENABLE_SERVER_STORAGE=false`:
 ```bash
 docker run -p 80:80 -e ENABLE_SERVER_STORAGE=false mfswiss/fossflow:latest
