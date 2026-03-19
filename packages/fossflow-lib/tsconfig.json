@@ -9,7 +9,13 @@
     "declaration": false,
     "declarationMap": false
   },
-  "exclude": ["node_modules", "./dist", "./docs"],
+  "exclude": [
+    "node_modules",
+    "./dist",
+    "./docs",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ],
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",

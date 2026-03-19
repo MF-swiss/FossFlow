@@ -427,6 +427,25 @@ export const connectorPathTileToGlobal = (
   );
 };
 
+interface GetConnectorRenderTiles {
+  tiles: Coords[];
+  rectangle: Rect;
+}
+
+export const getConnectorRenderTiles = ({
+  tiles,
+  rectangle
+}: GetConnectorRenderTiles): Coords[] => {
+  const xTileMax = rectangle.from.x - rectangle.to.x;
+
+  return tiles.map((tile) => {
+    return {
+      x: xTileMax - tile.x,
+      y: tile.y
+    };
+  });
+};
+
 export const getTextBoxEndTile = (textBox: TextBox, size: Size) => {
   if (textBox.orientation === ProjectionOrientationEnum.X) {
     return CoordsUtils.add(textBox.tile, {

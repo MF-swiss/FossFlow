@@ -3,6 +3,7 @@ import { useTheme, Box } from '@mui/material';
 import { UNPROJECTED_TILE_SIZE } from 'src/config';
 import {
   getAnchorTile,
+  getConnectorRenderTiles,
   getColorVariant,
   getConnectorDirectionIcon
 } from 'src/utils';
@@ -12,6 +13,7 @@ import { useIsoProjection } from 'src/hooks/useIsoProjection';
 import { useConnector } from 'src/hooks/useConnector';
 import { useScene } from 'src/hooks/useScene';
 import { useColor } from 'src/hooks/useColor';
+import { Coords } from 'src/types';
 
 interface Props {
   connector: ReturnType<typeof useScene>['connectors'][0];
@@ -52,19 +54,26 @@ export const Connector = memo(({ connector: _connector, isSelected }: Props) => 
     return (UNPROJECTED_TILE_SIZE / 100) * connector.width;
   }, [connector.width]);
 
+  const renderTiles = useMemo(() => {
+    return getConnectorRenderTiles({
+      tiles: connector.path.tiles,
+      rectangle: connector.path.rectangle
+    });
+  }, [connector.path.tiles, connector.path.rectangle]);
+
   const pathString = useMemo(() => {
-    return connector.path.tiles.reduce((acc, tile) => {
+    return renderTiles.reduce((acc: string, tile: Coords) => {
       return `${acc} ${tile.x * UNPROJECTED_TILE_SIZE + drawOffset.x},${
         tile.y * UNPROJECTED_TILE_SIZE + drawOffset.y
       }`;
     }, '');
-  }, [connector.path.tiles, drawOffset]);
+  }, [renderTiles, drawOffset]);
 
   // Create offset paths for double lines
   const offsetPaths = useMemo(() => {
     if (!connector.lineType || connector.lineType === 'SINGLE') return null;
     
-    const tiles = connector.path.tiles;
+    const tiles = renderTiles;
     if (tiles.length < 2) return null;
     
     const offset = connectorWidthPx * 3; // Larger spacing between double lines for visibility
@@ -121,18 +130,18 @@ export const Connector = memo(({ connector: _connector, isSelected }: Props) => 
       path1: path1Points.join(' '),
       path2: path2Points.join(' ')
     };
-  }, [connector.path.tiles, connector.lineType, connectorWidthPx, drawOffset]);
+  }, [renderTiles, connector.lineType, connectorWidthPx, drawOffset]);
 
   const anchorPositions = useMemo(() => {
     if (!isSelected) return [];
 
-    return connector.anchors.map((anchor) => {
+    return connector.anchors.map((anchor: (typeof connector.anchors)[number]) => {
       const position = getAnchorTile(anchor, currentView);
 
       return {
         id: anchor.id,
         x:
-          (connector.path.rectangle.from.x - position.x) *
+          (position.x - connector.path.rectangle.to.x) *
             UNPROJECTED_TILE_SIZE +
           drawOffset.x,
         y:
@@ -150,8 +159,8 @@ export const Connector = memo(({ connector: _connector, isSelected }: Props) => 
   ]);
 
   const directionIcon = useMemo(() => {
-    return getConnectorDirectionIcon(connector.path.tiles);
-  }, [connector.path.tiles]);
+    return getConnectorDirectionIcon(renderTiles);
+  }, [renderTiles]);
 
   const strokeDashArray = useMemo(() => {
     switch (connector.style) {
@@ -169,15 +178,7 @@ export const Connector = memo(({ connector: _connector, isSelected }: Props) => 
 
   return (
     <Box style={css}>
-      <Svg
-        style={{
-          // TODO: The original x coordinates of each tile seems to be calculated wrongly.
-          // They are mirrored along the x-axis.  The hack below fixes this, but we should
-          // try to fix this issue at the root of the problem (might have further implications).
-          transform: 'scale(-1, 1)'
-        }}
-        viewboxSize={pxSize}
-      >
+      <Svg viewboxSize={pxSize}>
         {lineType === 'SINGLE' ? (
           <>
             <polyline
@@ -246,17 +247,17 @@ export const Connector = memo(({ connector: _connector, isSelected }: Props) => 
         ) : null}
 
         {/* Circle for port-channel representation */}
-        {lineType === 'DOUBLE_WITH_CIRCLE' && connector.path.tiles.length >= 2 && (() => {
-          const midIndex = Math.floor(connector.path.tiles.length / 2);
-          const midTile = connector.path.tiles[midIndex];
+        {lineType === 'DOUBLE_WITH_CIRCLE' && renderTiles.length >= 2 && (() => {
+          const midIndex = Math.floor(renderTiles.length / 2);
+          const midTile = renderTiles[midIndex];
           const x = midTile.x * UNPROJECTED_TILE_SIZE + drawOffset.x;
           const y = midTile.y * UNPROJECTED_TILE_SIZE + drawOffset.y;
           
           // Calculate rotation based on line direction at middle point
           let rotation = 0;
-          if (midIndex > 0 && midIndex < connector.path.tiles.length - 1) {
-            const prevTile = connector.path.tiles[midIndex - 1];
-            const nextTile = connector.path.tiles[midIndex + 1];
+          if (midIndex > 0 && midIndex < renderTiles.length - 1) {
+            const prevTile = renderTiles[midIndex - 1];
+            const nextTile = renderTiles[midIndex + 1];
             const dx = nextTile.x - prevTile.x;
             const dy = nextTile.y - prevTile.y;
             rotation = Math.atan2(dy, dx) * (180 / Math.PI);
@@ -291,7 +292,7 @@ export const Connector = memo(({ connector: _connector, isSelected }: Props) => 
           );
         })()}
 
-        {anchorPositions.map((anchor) => {
+        {anchorPositions.map((anchor: (typeof anchorPositions)[number]) => {
           return (
             <g key={anchor.id}>
               <Circle
