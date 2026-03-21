@@ -59,6 +59,8 @@
         "storageFull": "Depolama dolu! Depolama Yöneticisi açılıyor...",
         "autoSaveFailed": "Depolama dolu! Lütfen alan açmak için Depolama Yöneticisi'ni kullanın.",
         "beforeUnload": "Kaydedilmemiş değişiklikleriniz var. Ayrılmak istediğinizden emin misiniz?",
-        "quotaExceeded": "Depolama kotası aşıldı. Lütfen önemli diyagramları dışa aktarın ve biraz alan açın."
+        "quotaExceeded": "Depolama kotası aşıldı. Lütfen önemli diyagramları dışa aktarın ve biraz alan açın.",
+        "invalidImportFile": "İçe aktarma dosyası geçersiz veya bozuk. Lütfen dosya biçimini kontrol edin.",
+        "importFailed": "Diyagram içe aktarılamadı. Lütfen tekrar deneyin."
     }
 }

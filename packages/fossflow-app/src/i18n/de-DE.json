@@ -59,6 +59,8 @@
         "storageFull": "Speicher voll! Speicher-Manager wird geöffnet...",
         "autoSaveFailed": "Speicher voll! Bitte verwenden Sie den Speicher-Manager, um Platz freizugeben.",
         "beforeUnload": "Sie haben ungespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen?",
-        "quotaExceeded": "Speicher-Kontingent überschritten. Bitte exportieren Sie wichtige Diagramme und schaffen Sie Platz."
+        "quotaExceeded": "Speicher-Kontingent überschritten. Bitte exportieren Sie wichtige Diagramme und schaffen Sie Platz.",
+        "invalidImportFile": "Importdatei ist ungültig oder beschädigt. Bitte überprüfen Sie das Dateiformat.",
+        "importFailed": "Fehler beim Importieren des Diagramms. Bitte versuchen Sie es erneut."
     }
 }

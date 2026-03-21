@@ -59,6 +59,8 @@
         "storageFull": "存储空间已满！正在打开存储管理器...",
         "autoSaveFailed": "存储空间已满！请使用存储管理器释放空间。",
         "beforeUnload": "您有未保存的更改。您确定要离开吗？",
-        "quotaExceeded": "存储配额已超出。请导出重要图表并清理一些空间。"
+        "quotaExceeded": "存储配额已超出。请导出重要图表并释放空间。",
+        "invalidImportFile": "导入文件无效或已损坏。请检查文件格式。",
+        "importFailed": "导入图表失败。请重试。"
     }
 }

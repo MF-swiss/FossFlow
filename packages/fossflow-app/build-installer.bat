@@ -36,15 +36,25 @@ if not exist "dist\electron" mkdir "dist\electron"
 copy /Y "electron\main.js" "dist\electron\main.js" 2>nul || copy /Y "..\..\public\electron\main.js" "dist\electron\main.js"
 copy /Y "electron\preload.js" "dist\electron\preload.js" 2>nul || copy /Y "..\..\public\electron\preload.js" "dist\electron\preload.js"
 
-REM Create portable launcher
-echo Creating portable launcher...
+REM Copy local server script (no external deps)
+echo Copying local server script...
+copy /Y "FossFlowServer.js" "dist\FossFlowServer.js" >nul
+
+REM Create launcher
+echo Creating launcher...
 (
     echo @echo off
     echo title FossFlow
     echo setlocal enabledelayedexpansion
-    echo set PATH=C:\Program Files\nodejs;%%PATH%%
     echo cd /d "%%~dp0"
-    echo node electron\main.js
+    echo where node ^>nul 2^>^&1
+    echo if errorlevel 1 ^(
+    echo   echo [ERROR] Node.js not found. Please run install.bat again.
+    echo   pause
+    echo   exit /b 1
+    echo ^)
+    echo start "" "http://127.0.0.1:4173"
+    echo node FossFlowServer.js
 ) > "dist\FossFlow.bat"
 
 REM Create installer script
@@ -60,13 +70,15 @@ echo Creating install script...
     echo set "DEFAULT_INSTALL_DIR=%%LOCALAPPDATA%%\Programs\FossFlow"
     echo net session ^>nul 2^>^&1
     echo if %%errorlevel%%==0 set "DEFAULT_INSTALL_DIR=%%ProgramFiles%%\FossFlow"
+    echo set "INSTALL_DIR=%%DEFAULT_INSTALL_DIR%%"
     echo.
-    echo echo Suggested install path: %%DEFAULT_INSTALL_DIR%%
-    echo set /p INSTALL_DIR=Install directory [%%DEFAULT_INSTALL_DIR%%]: 
-    echo if "%%INSTALL_DIR%%"=="" set "INSTALL_DIR=%%DEFAULT_INSTALL_DIR%%"
+    echo echo Installing to: %%INSTALL_DIR%%
     echo.
     echo where node ^>nul 2^>^&1
-    echo if errorlevel 1 ^(
+    echo if not errorlevel 1 ^(
+    echo     echo [OK] Node.js found.
+    echo     node -v
+    echo ^) else ^(
     echo     echo [INFO] Node.js not found.
     echo     choice /C YN /N /M "Install Node.js LTS automatically via winget? [Y/N]: "
     echo     if errorlevel 2 ^(
@@ -94,10 +106,11 @@ echo Creating install script...
     echo xcopy /E /I /Y "%%SCRIPT_DIR%%\build" "%%INSTALL_DIR%%\build" ^>nul
     echo xcopy /E /I /Y "%%SCRIPT_DIR%%\electron" "%%INSTALL_DIR%%\electron" ^>nul
     echo copy /Y "%%SCRIPT_DIR%%\FossFlow.bat" "%%INSTALL_DIR%%\FossFlow.bat" ^>nul
+    echo copy /Y "%%SCRIPT_DIR%%\FossFlowServer.js" "%%INSTALL_DIR%%\FossFlowServer.js" ^>nul
     echo copy /Y "%%SCRIPT_DIR%%\uninstall.bat" "%%INSTALL_DIR%%\uninstall.bat" ^>nul
     echo.
     echo echo Creating shortcuts...
-    echo powershell -NoProfile -ExecutionPolicy Bypass -Command "$ws = New-Object -ComObject WScript.Shell; $desktop = [Environment]::GetFolderPath('Desktop'); $lnk = $ws.CreateShortcut((Join-Path $desktop 'FossFlow.lnk')); $lnk.TargetPath = Join-Path '%%INSTALL_DIR%%' 'FossFlow.bat'; $lnk.WorkingDirectory = '%%INSTALL_DIR%%'; $lnk.Save(); $startMenu = Join-Path $env:APPDATA 'Microsoft\\Windows\\Start Menu\\Programs'; $lnk2 = $ws.CreateShortcut((Join-Path $startMenu 'FossFlow.lnk')); $lnk2.TargetPath = Join-Path '%%INSTALL_DIR%%' 'FossFlow.bat'; $lnk2.WorkingDirectory = '%%INSTALL_DIR%%'; $lnk2.Save();"
+    echo powershell -NoProfile -ExecutionPolicy Bypass -Command "$ws = New-Object -ComObject WScript.Shell; $desktop = [Environment]::GetFolderPath('Desktop'); $icon = Join-Path '%%INSTALL_DIR%%' 'build\\favicon.ico'; $lnk = $ws.CreateShortcut((Join-Path $desktop 'FossFlow.lnk')); $lnk.TargetPath = Join-Path '%%INSTALL_DIR%%' 'FossFlow.bat'; $lnk.WorkingDirectory = '%%INSTALL_DIR%%'; $lnk.IconLocation = $icon; $lnk.Save(); $startMenu = Join-Path $env:APPDATA 'Microsoft\\Windows\\Start Menu\\Programs'; $lnk2 = $ws.CreateShortcut((Join-Path $startMenu 'FossFlow.lnk')); $lnk2.TargetPath = Join-Path '%%INSTALL_DIR%%' 'FossFlow.bat'; $lnk2.WorkingDirectory = '%%INSTALL_DIR%%'; $lnk2.IconLocation = $icon; $lnk2.Save();"
     echo.
     echo echo [OK] FossFlow installed to: %%INSTALL_DIR%%
     echo echo Use desktop/start menu shortcut to launch FossFlow.
@@ -135,7 +148,7 @@ echo Creating installer package...
 if exist "dist\FossFlow-Installer.zip" del "dist\FossFlow-Installer.zip"
 
 REM For Windows 11/10 with built-in ZIP support
-powershell -NoProfile -ExecutionPolicy Bypass -Command "Compress-Archive -Path @('dist\build','dist\electron','dist\install.bat','dist\uninstall.bat','dist\FossFlow.bat') -DestinationPath 'dist\FossFlow-Installer.zip' -Force" 2>nul
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Compress-Archive -Path @('dist\build','dist\electron','dist\install.bat','dist\uninstall.bat','dist\FossFlow.bat','dist\FossFlowServer.js') -DestinationPath 'dist\FossFlow-Installer.zip' -Force" 2>nul
 
 if exist "dist\FossFlow-Installer.zip" (
     echo [OK] Installer created: FossFlow-Installer.zip

@@ -59,6 +59,8 @@
         "storageFull": "Storage full! Opening Storage Manager...",
         "autoSaveFailed": "Storage full! Please use Storage Manager to free up space.",
         "beforeUnload": "You have unsaved changes. Are you sure you want to leave?",
-        "quotaExceeded": "Storage quota exceeded. Please export important diagrams and clear some space."
+        "quotaExceeded": "Storage quota exceeded. Please export important diagrams and clear some space.",
+        "invalidImportFile": "Invalid or corrupted import file. Please check the file format.",
+        "importFailed": "Failed to import diagram. Please try again."
     }
 }

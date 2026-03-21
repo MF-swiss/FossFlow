@@ -649,6 +649,155 @@ function EditorPage() {
     }
   };
 
+  const importEditableDiagram = async () => {
+    if (
+      hasUnsavedChanges &&
+      !window.confirm(t('alert.unsavedChanges'))
+    ) {
+      return;
+    }
+
+    try {
+      // Try using File System Access API first
+      if (typeof (window as any).showOpenFilePicker === 'function') {
+        try {
+          const fileHandles = await (window as any).showOpenFilePicker({
+            types: [
+              {
+                description: 'FossFlow editable diagram',
+                accept: { 'application/json': ['.fossflow.json', '.json'] }
+              }
+            ],
+            multiple: false
+          });
+
+          if (fileHandles.length === 0) return;
+
+          const fileHandle = fileHandles[0];
+          const file = await fileHandle.getFile();
+          const text = await file.text();
+          const importedData = JSON.parse(text);
+
+          // Validate imported data structure
+          if (!importedData.title || !Array.isArray(importedData.items)) {
+            alert(t('alert.invalidImportFile'));
+            return;
+          }
+
+          // Load the imported diagram
+          await loadImportedDiagram(
+            importedData,
+            importedData.title || 'Imported Diagram'
+          );
+        } catch (error) {
+          if (error instanceof DOMException && error.name === 'AbortError') {
+            return;
+          }
+          console.warn(
+            'File System Access API failed, fallback to input element.',
+            error
+          );
+          // Fallback to file input
+          fileInputRef.current?.click();
+        }
+      } else {
+        // Fallback to file input element
+        fileInputRef.current?.click();
+      }
+    } catch (error) {
+      console.error('Import failed:', error);
+      alert(t('alert.importFailed'));
+    }
+  };
+
+  const loadImportedDiagram = async (
+    importedData: any,
+    fileName: string
+  ) => {
+    try {
+      // Auto-detect and load required icon packs
+      await iconPackManager.loadPacksForDiagram(
+        importedData.items || []
+      );
+
+      // Merge imported icons with loaded icon set
+      const importedIcons = (importedData.icons || []).filter(
+        (icon: any) => {
+          return icon.collection === 'imported';
+        }
+      );
+      const mergedIcons = [
+        ...iconPackManager.loadedIcons,
+        ...importedIcons
+      ];
+
+      const dataWithIcons = {
+        ...importedData,
+        icons: mergedIcons,
+        colors: importedData.colors || defaultColors,
+        fitToScreen: importedData.fitToScreen !== false
+      };
+
+      // Create a temporary diagram object (not saved to storage)
+      const tempDiagram: SavedDiagram = {
+        id: 'temp-' + Date.now(),
+        name: fileName.replace(/\.\w+$/, ''), // Remove file extension
+        data: dataWithIcons,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      setCurrentDiagram(tempDiagram);
+      setDiagramName(tempDiagram.name);
+      setDiagramData(dataWithIcons);
+      setCurrentModel(dataWithIcons);
+      setFossflowKey((prev) => {
+        return prev + 1;
+      }); // Force re-render
+      setHasUnsavedChanges(false);
+
+      // Save to localStorage for recovery
+      try {
+        localStorage.setItem('fossflow-last-opened-data', JSON.stringify(dataWithIcons));
+      } catch (e) {
+        console.error('Failed to save imported diagram to cache:', e);
+      }
+    } catch (error) {
+      console.error('Failed to load imported diagram:', error);
+      alert(t('alert.importFailed'));
+    }
+  };
+
+  const handleFileInputChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const importedData = JSON.parse(text);
+
+      // Validate imported data structure
+      if (!importedData.title || !Array.isArray(importedData.items)) {
+        alert(t('alert.invalidImportFile'));
+        return;
+      }
+
+      await loadImportedDiagram(importedData, file.name);
+    } catch (error) {
+      console.error('Failed to parse imported file:', error);
+      alert(t('alert.invalidImportFile'));
+    } finally {
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleDiagramManagerLoad = async (id: string, data: any) => {
     console.log(`App: handleDiagramManagerLoad called for diagram ${id}`);
 
@@ -884,6 +1033,14 @@ function EditorPage() {
               }}
             >
               {t('nav.loadSessionOnly')}
+            </button>
+            <button
+              onClick={() => {
+                return importEditableDiagram();
+              }}
+              style={{ backgroundColor: '#28a745' }}
+            >
+              📂 {t('nav.importFile')}
             </button>
             <button
               onClick={() => {
@@ -1160,6 +1317,15 @@ function EditorPage() {
           }}
         />
       )}
+
+      {/* Hidden file input for import fallback */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".fossflow.json,.json"
+        onChange={handleFileInputChange}
+        style={{ display: 'none' }}
+      />
     </div>
   );
 }

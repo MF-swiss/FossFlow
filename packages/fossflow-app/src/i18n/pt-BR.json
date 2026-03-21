@@ -59,6 +59,8 @@
         "storageFull": "Armazenamento cheio! Abrindo o gerenciador de armazenamento...",
         "autoSaveFailed": "Armazenamento cheio! Por favor, use o gerenciador de armazenamento para liberar espaço.",
         "beforeUnload": "Você tem alterações não salvas. Tem certeza de que deseja sair?",
-        "quotaExceeded": "Cota de armazenamento excedida. Por favor, exporte os diagramas importantes e libere espaço."
+        "quotaExceeded": "Cota de armazenamento excedida. Exporte diagramas importantes e libere espaço.",
+        "invalidImportFile": "Arquivo de importação inválido ou corrompido. Verifique o formato do arquivo.",
+        "importFailed": "Falha ao importar o diagrama. Por favor, tente novamente."
     }
 }
