@@ -40,6 +40,8 @@
             "recommendedMessage": "Bu, çalışmanızı kalıcı olarak kaydetmenin en iyi yoludur.",
             "noteMessage": "Dışa aktarılan JSON dosyaları daha sonra içe aktarılabilir veya başkalarıyla paylaşılabilir.",
             "btnDownload": "JSON İndir",
+            "btnSaveAsEditable": "Farklı Kaydet… (düzenlenebilir)",
+            "btnPdfWithoutGrid": "PDF (ızgara olmadan)",
             "btnCancel": "İptal"
         },
         "readOnly": {

@@ -16,6 +16,7 @@ import { allLocales } from 'fossflow';
 import { useIconPackManager, IconPackName } from './services/iconPackManager';
 import './App.css';
 import { BrowserRouter, Route, Routes, useParams } from 'react-router-dom';
+import domtoimage from 'dom-to-image-more';
 
 // Load core isoflow icons (always loaded)
 const coreIcons = flattenCollections([isoflowIsopack]);
@@ -485,6 +486,169 @@ function EditorPage() {
     setHasUnsavedChanges(false); // Mark as saved after export
   };
 
+  const createExportData = () => {
+    const modelToExport = currentModel || diagramData;
+    const allModelIcons = modelToExport.icons || [];
+    const diagramImportedIcons = (diagramData.icons || []).filter((icon) => {
+      return icon.collection === 'imported';
+    });
+
+    const iconMap = new Map();
+
+    allModelIcons.forEach((icon) => {
+      iconMap.set(icon.id, icon);
+    });
+
+    diagramImportedIcons.forEach((icon) => {
+      if (!iconMap.has(icon.id)) {
+        iconMap.set(icon.id, icon);
+      }
+    });
+
+    const allIcons = Array.from(iconMap.values());
+
+    return {
+      title: diagramName || modelToExport.title || 'Exported Diagram',
+      icons: allIcons,
+      colors: modelToExport.colors || [],
+      items: modelToExport.items || [],
+      views: modelToExport.views || [],
+      fitToScreen: true
+    };
+  };
+
+  const getExportFilename = () => {
+    const sanitized = (diagramName || 'diagram')
+      .trim()
+      .replace(/[\\/:*?"<>|]/g, '-')
+      .replace(/\s+/g, '-');
+    const datePart = new Date().toISOString().split('T')[0];
+    return `${sanitized || 'diagram'}-${datePart}.fossflow.json`;
+  };
+
+  const downloadBlob = (blob: Blob, fileName: string) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const saveEditableDiagram = async (askWhere: boolean) => {
+    const exportData = createExportData();
+    const jsonString = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const fileName = getExportFilename();
+
+    if (askWhere && typeof (window as any).showSaveFilePicker === 'function') {
+      try {
+        const fileHandle = await (window as any).showSaveFilePicker({
+          suggestedName: fileName,
+          types: [
+            {
+              description: 'FossFlow editable diagram',
+              accept: { 'application/json': ['.fossflow.json', '.json'] }
+            }
+          ]
+        });
+
+        const writable = await fileHandle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+
+        setShowExportDialog(false);
+        setHasUnsavedChanges(false);
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          return;
+        }
+        console.warn('Save file picker failed, fallback to download.', error);
+      }
+    }
+
+    downloadBlob(blob, fileName);
+    setShowExportDialog(false);
+    setHasUnsavedChanges(false);
+  };
+
+  const exportPdfWithoutGrid = async () => {
+    const diagramContainer = document.querySelector(
+      '.fossflow-container'
+    ) as HTMLDivElement | null;
+
+    if (!diagramContainer) {
+      alert('Export area not found.');
+      return;
+    }
+
+    try {
+      const svgDataUrl = await domtoimage.toSvg(diagramContainer, {
+        cacheBust: true,
+        bgcolor: '#ffffff',
+        filter: (node: Node) => {
+          if (!(node instanceof Element)) {
+            return true;
+          }
+
+          const style = window.getComputedStyle(node);
+          const backgroundImage = style.backgroundImage || '';
+
+          // Exclude grid background from PDF export
+          if (backgroundImage.includes('grid-tile-bg')) {
+            return false;
+          }
+
+          return true;
+        }
+      });
+
+      const commaIndex = svgDataUrl.indexOf(',');
+      const header = svgDataUrl.slice(0, commaIndex);
+      const payload = svgDataUrl.slice(commaIndex + 1);
+      const svgMarkup = header.includes(';base64')
+        ? atob(payload)
+        : decodeURIComponent(payload);
+
+      const printWindow = window.open('', '_blank', 'width=1280,height=900');
+
+      if (!printWindow) {
+        alert('Please allow pop-ups to export PDF.');
+        return;
+      }
+
+      const title = (diagramName || 'FossFlow Diagram').replace(/</g, '&lt;');
+      printWindow.document.write(`<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>${title}</title>
+    <style>
+      @page { margin: 12mm; }
+      html, body { margin: 0; padding: 0; background: #fff; }
+      .sheet { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+      .sheet svg { max-width: 100%; max-height: 100vh; }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">${svgMarkup}</div>
+  </body>
+</html>`);
+      printWindow.document.close();
+
+      printWindow.onload = () => {
+        printWindow.focus();
+        printWindow.print();
+      };
+
+      setShowExportDialog(false);
+    } catch (error) {
+      console.error('PDF export failed:', error);
+      alert('PDF export failed. Please try again.');
+    }
+  };
+
   const handleDiagramManagerLoad = async (id: string, data: any) => {
     console.log(`App: handleDiagramManagerLoad called for diagram ${id}`);
 
@@ -949,6 +1113,20 @@ function EditorPage() {
             <div className="dialog-buttons">
               <button onClick={exportDiagram}>
                 {t('dialog.export.btnDownload')}
+              </button>
+              <button
+                onClick={() => {
+                  return saveEditableDiagram(true);
+                }}
+              >
+                {t('dialog.export.btnSaveAsEditable')}
+              </button>
+              <button
+                onClick={() => {
+                  return exportPdfWithoutGrid();
+                }}
+              >
+                {t('dialog.export.btnPdfWithoutGrid')}
               </button>
               <button
                 onClick={() => {

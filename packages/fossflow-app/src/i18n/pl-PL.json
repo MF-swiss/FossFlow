@@ -40,6 +40,8 @@
             "recommendedMessage": "To najlepszy sposób na trwałe zapisanie swojej pracy.",
             "noteMessage": "Wyeksportowane pliki JSON można później zaimportować lub udostępnić innym osobom.",
             "btnDownload": "Pobierz plik JSON",
+            "btnSaveAsEditable": "Zapisz jako… (edytowalny)",
+            "btnPdfWithoutGrid": "PDF (bez siatki)",
             "btnCancel": "Anuluj"
         },
         "readOnly": {

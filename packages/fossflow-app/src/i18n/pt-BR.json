@@ -40,6 +40,8 @@
             "recommendedMessage": "Esta é a melhor forma de salvar seu trabalho permanentemente.",
             "noteMessage": "Arquivos JSON exportados podem ser importados posteriormente ou compartilhados com outros.",
             "btnDownload": "Baixar JSON",
+            "btnSaveAsEditable": "Salvar como… (editável)",
+            "btnPdfWithoutGrid": "PDF (sem grade)",
             "btnCancel": "Cancelar"
         },
         "readOnly": {

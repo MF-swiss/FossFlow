@@ -1,0 +1,64 @@
+{
+    "nav": {
+        "newDiagram": "Neues Diagramm",
+        "saveSessionOnly": "Speichern (nur Sitzung)",
+        "loadSessionOnly": "Laden (nur Sitzung)",
+        "importFile": "Datei importieren",
+        "exportFile": "Datei exportieren",
+        "quickSaveSession": "Schnellspeichern (Sitzung)",
+        "serverStorage": "Server-Speicher"
+    },
+    "status": {
+        "current": "Aktuell",
+        "untitled": "Unbenanntes Diagramm",
+        "modified": "Geändert",
+        "sessionStorageNote": "Nur Sitzungsspeicher – für dauerhaftes Speichern exportieren"
+    },
+    "dialog": {
+        "save": {
+            "title": "Diagramm speichern (nur aktuelle Sitzung)",
+            "warningTitle": "Wichtig",
+            "warningMessage": "Diese Speicherung ist temporär und geht beim Schließen des Browsers verloren.",
+            "warningExport": "Verwenden Sie <strong>Datei exportieren</strong>, um Ihre Arbeit dauerhaft zu speichern.",
+            "placeholder": "Diagrammname eingeben",
+            "btnSave": "Speichern",
+            "btnCancel": "Abbrechen"
+        },
+        "load": {
+            "title": "Diagramm laden (nur aktuelle Sitzung)",
+            "noteTitle": "Hinweis",
+            "noteMessage": "Diese Speicherungen sind temporär. Exportieren Sie Ihre Diagramme, um sie dauerhaft zu behalten.",
+            "noSavedDiagrams": "Keine gespeicherten Diagramme in dieser Sitzung gefunden",
+            "updated": "Aktualisiert",
+            "btnLoad": "Laden",
+            "btnDelete": "Löschen",
+            "btnClose": "Schließen"
+        },
+        "export": {
+            "title": "Diagramm exportieren",
+            "recommendedTitle": "Empfohlen",
+            "recommendedMessage": "Das ist die beste Methode, Ihre Arbeit dauerhaft zu speichern.",
+            "noteMessage": "Exportierte JSON-Dateien können später importiert oder mit anderen geteilt werden.",
+            "btnDownload": "JSON herunterladen",
+            "btnSaveAsEditable": "Speichern unter… (bearbeitbar)",
+            "btnPdfWithoutGrid": "PDF (ohne Raster)",
+            "btnCancel": "Abbrechen"
+        },
+        "readOnly": {
+            "mode": "Nur-Lese-Modus",
+            "failed": "Diagramm konnte nicht geladen werden"
+        }
+    },
+    "alert": {
+        "enterDiagramName": "Bitte geben Sie einen Diagrammnamen ein",
+        "diagramExists": "Ein Diagramm mit dem Namen \"{{name}}\" existiert bereits in dieser Sitzung. Es wird überschrieben. Möchten Sie fortfahren?",
+        "unsavedChanges": "Sie haben ungespeicherte Änderungen. Trotzdem laden?",
+        "createNewDiagram": "Neues Diagramm erstellen?",
+        "unsavedChangesExport": "Sie haben ungespeicherte Änderungen. Exportieren Sie Ihr Diagramm zuerst, um es zu speichern. Fortfahren?",
+        "confirmDelete": "Möchten Sie dieses Diagramm wirklich löschen?",
+        "storageFull": "Speicher voll! Speicher-Manager wird geöffnet...",
+        "autoSaveFailed": "Speicher voll! Bitte verwenden Sie den Speicher-Manager, um Platz freizugeben.",
+        "beforeUnload": "Sie haben ungespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen?",
+        "quotaExceeded": "Speicher-Kontingent überschritten. Bitte exportieren Sie wichtige Diagramme und schaffen Sie Platz."
+    }
+}

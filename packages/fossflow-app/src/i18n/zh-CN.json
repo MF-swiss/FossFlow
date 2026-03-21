@@ -40,6 +40,8 @@
             "recommendedMessage": "这是永久保存工作的最佳方式。",
             "noteMessage": "导出的 JSON 文件可以稍后导入或与他人共享。",
             "btnDownload": "下载 JSON",
+            "btnSaveAsEditable": "另存为…（可编辑）",
+            "btnPdfWithoutGrid": "PDF（无网格）",
             "btnCancel": "取消"
         },
         "readOnly": {

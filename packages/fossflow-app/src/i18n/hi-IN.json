@@ -40,6 +40,8 @@
             "recommendedMessage": "यह आपके काम को स्थायी रूप से सहेजने का सबसे अच्छा तरीका है।",
             "noteMessage": "निर्यात की गई JSON फ़ाइलों को बाद में आयात किया जा सकता है या दूसरों के साथ साझा किया जा सकता है।",
             "btnDownload": "JSON डाउनलोड करें",
+            "btnSaveAsEditable": "Save As… (editable)",
+            "btnPdfWithoutGrid": "PDF (without grid)",
             "btnCancel": "रद्द करें"
         },
         "readOnly": {
