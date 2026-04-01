@@ -63,7 +63,7 @@
     "@types/jsdom": "^28.0.1",
     "@types/pathfinding": "^0.1.0",
     "@types/quill": "^2.0.14",
-    "@types/uuid": "^9.0.8",
+    "@types/uuid": "^11.0.0",
     "css-loader": "^7.1.4",
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.3.0",
