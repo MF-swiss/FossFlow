@@ -34,7 +34,7 @@
     "file-saver": "^2.0.5",
     "gsap": "^3.15.0",
     "immer": "^11.1.4",
-    "mui-color-input": "^7.0.0",
+    "mui-color-input": "^8.0.0",
     "paper": "^0.12.18",
     "pathfinding": "^0.4.18",
     "react-hook-form": "^7.73.1",
